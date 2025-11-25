@@ -2,11 +2,12 @@ import streamlit as st
 from openai import OpenAI
 import os
 
-# --- RAG LIBRARIES ---
+# --- RAG LIBRARIES (Updated imports) ---
 # We use these to search our "Knowledge Base" for relevant Malaysian health info
 from langchain_community.vectorstores import FAISS
 from langchain_openai import OpenAIEmbeddings
-from langchain.docstore.document import Document
+# FIXED: Updated import path for recent LangChain versions
+from langchain_core.documents import Document
 
 # ================= CONFIGURATION =================
 st.set_page_config(page_title="M3QuitBuddy", page_icon="🫁")
@@ -74,6 +75,7 @@ def setup_rag(api_key):
     This function creates a searchable database (Vector Store) from the text above.
     It runs only once to save speed/cost.
     """
+    # Using lightweight embeddings
     embeddings = OpenAIEmbeddings(openai_api_key=api_key)
     # Split the text into chunks based on the empty lines
     docs = [Document(page_content=chunk) for chunk in MALAYSIA_CPG_TEXT.split("\n\n") if chunk.strip()]
